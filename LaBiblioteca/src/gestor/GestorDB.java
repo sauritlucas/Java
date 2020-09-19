@@ -365,7 +365,7 @@ public class GestorDB {
         return  listado;
     }
     
-   public ArrayList<ReporteLibroPorAuTOR> ListadoReporteLibrosPorAutor(int id){
+   public ArrayList<ReporteLibroPorAuTOR> ListadoReporteLibrosPorAutor(String nombre){
          //Inicializamos un array vacio
         ArrayList<ReporteLibroPorAuTOR> listado = new ArrayList<>();
         try {
@@ -374,7 +374,7 @@ public class GestorDB {
             PreparedStatement pstmt = conn.prepareStatement("Select nombre Autor, nacionalidad, descripcion\n" +
 "from Autores a inner join Libros l on a.id=l.id_Autor\n" +
 "where nombre=?");
-            pstmt.setInt(1, id);
+            pstmt.setString(1, nombre);
             
             ResultSet rs = pstmt.executeQuery();
             
@@ -408,7 +408,59 @@ public class GestorDB {
         return  listado;
     }
    
+   public String PorcentajeLibrosDomicilio(){
+        //Declaramos la variable y la seteamos en null
+        String resultado = "";
+        
+         try{
+            abrirConexion();
+            Statement stmt = conn.createStatement();
+            ResultSet rs =  stmt.executeQuery("select  (select count(*)  from libros where tipoPrestamo='Domicilio') *100 / COUNT(*)  Porcentaje \n" +
+"from Libros");
+            
+                if (rs.next()) {
+                    //Aca le pasamos el nombre de la columna SQL de la consulta
+                    resultado= rs.getString("Porcentaje");
+                }
+            
+            
+            rs.close();
+            stmt.close();
+            cerrarConexion();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+            
+            return resultado;
+        }
    
+   public Autor GetAutorPorNombre(String nombre){
+        Autor resultado = null;
+        
+        try {
+            abrirConexion();
+            PreparedStatement pstmt = conn.prepareStatement("Select * From Autores WHERE nombre=?");
+            pstmt.setString(1, nombre);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                String nacionalidad = rs.getString(3);
+                resultado = new Autor(id, nombre, nacionalidad);
+            }
+            
+            rs.close();
+            pstmt.close();
+            cerrarConexion();
+            
+        } catch (SQLException ex) {
+            
+            ex.printStackTrace();
+        }
+        return resultado;
+    }
    
    
     

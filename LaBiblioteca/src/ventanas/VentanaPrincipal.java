@@ -20,8 +20,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         cargarTabla();
         String cantidadLibros = g.cantidadLibros();
+        String librosAdomicilio = g.PorcentajeLibrosDomicilio();
         cargarAutores();
         txtCantidadLibros.setText(cantidadLibros);
+        lblLibrosAdomicilio.setText(librosAdomicilio + '%');
         
         
     }
@@ -30,7 +32,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                        
         DefaultTableModel dm = new DefaultTableModel();
         
-        dm.setColumnIdentifiers(new String[] {"id", "descripcion", "tipo de prestamo","id_autor", "Nombre Autor"});
+        dm.setColumnIdentifiers(new String[] {"id", "Nombre Libro", "Tipo de Prestamo","id_autor", "Autor"});
         GestorDB g = new GestorDB();
         ArrayList<Libro> lista = g.GetListadoLibros();
         
@@ -44,6 +46,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
           });  
         }
         tablaLibros.setModel(dm);
+        
+        //Ocultar Columna 0
+        tablaLibros.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaLibros.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaLibros.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaLibros.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+        //Ocultar Columna 2
+        tablaLibros.getColumnModel().getColumn(3).setMaxWidth(0);
+        tablaLibros.getColumnModel().getColumn(3).setMinWidth(0);
+        tablaLibros.getTableHeader().getColumnModel().getColumn(3).setMaxWidth(0);
+        tablaLibros.getTableHeader().getColumnModel().getColumn(3).setMinWidth(0);
+        
+        
      }
      
     
@@ -78,6 +93,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cboVerLibrosAutor = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         btnLibrosAutor = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        lblLibrosAdomicilio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,7 +134,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaLibros);
 
-        btnListadoDeLibrosNacionales.setText("Obtener  Listado Libros Nacionales");
+        btnListadoDeLibrosNacionales.setText("Listado de Libros Nacionales y Populares");
         btnListadoDeLibrosNacionales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListadoDeLibrosNacionalesActionPerformed(evt);
@@ -140,31 +157,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Porcentaje de Prestamos en Domicilio:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(btnAgregarLibro)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(btnModificar)
-                        .addGap(88, 88, 88)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtCantidadLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboVerLibrosAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -173,10 +171,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnListadoDeLibrosNacionales)
                 .addGap(145, 145, 145))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLibrosAutor)
-                .addGap(100, 100, 100))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblLibrosAdomicilio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLibrosAutor)
+                        .addGap(100, 100, 100))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(btnAgregarLibro)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(btnModificar)
+                                .addGap(88, 88, 88)
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtCantidadLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cboVerLibrosAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53))))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(51, 51, 51)
@@ -204,7 +228,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(cboVerLibrosAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)))
                 .addGap(18, 18, 18)
-                .addComponent(btnLibrosAutor)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLibrosAutor)
+                    .addComponent(jLabel3)
+                    .addComponent(lblLibrosAdomicilio))
                 .addGap(53, 53, 53))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -272,7 +299,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListadoDeLibrosNacionalesActionPerformed
 
     private void btnLibrosAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosAutorActionPerformed
-        // TODO add your handling code here:
+        String nombreAutor =  cboVerLibrosAutor.getSelectedItem().toString();
+        VentanaLibrosDelAutor vla = new VentanaLibrosDelAutor(nombreAutor);
+        vla.setVisible(true);
     }//GEN-LAST:event_btnLibrosAutorActionPerformed
 
     /**
@@ -320,7 +349,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox cboVerLibrosAutor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblLibrosAdomicilio;
     private javax.swing.JTable tablaLibros;
     private javax.swing.JLabel txtCantidadLibros;
     // End of variables declaration//GEN-END:variables

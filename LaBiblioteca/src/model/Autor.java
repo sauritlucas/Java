@@ -4,7 +4,7 @@ package model;
 // NINGUNA NOVEDAD a notificar
 
 public class Autor {
-   private int id;
+    private int id;
     private String nombre;
     private String nacionalidad;
     
